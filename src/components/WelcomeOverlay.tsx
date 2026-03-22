@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 const AVATARS = [
   '/img-mari/miri-1.png',
@@ -32,38 +32,32 @@ function markShown() {
 }
 
 export function WelcomeOverlay() {
-  const [visible, setVisible] = useState(false)
-  const [phase, setPhase] = useState(0) // 0=avatar, 1=line1, 2=line2, 3=line3
+  const [visible, setVisible] = useState(() => shouldShow())
+  const [phase, setPhase] = useState(-1)
   const [exiting, setExiting] = useState(false)
 
   const dow = new Date().getDay()
-  // Weekends show Friday mood
   const dayIndex = dow === 0 || dow === 6 ? 4 : dow - 1
 
+  const dismiss = useCallback(() => {
+    if (exiting) return
+    setExiting(true)
+    setTimeout(() => setVisible(false), 600)
+  }, [exiting])
+
   useEffect(() => {
-    if (!shouldShow()) return
-    setVisible(true)
+    if (!visible) return
     markShown()
 
-    const t1 = setTimeout(() => setPhase(1), 400)
-    const t2 = setTimeout(() => setPhase(2), 1200)
-    const t3 = setTimeout(() => setPhase(3), 2200)
-    const t4 = setTimeout(() => setExiting(true), 4000)
-    const t5 = setTimeout(() => setVisible(false), 4600)
+    const timers = [
+      setTimeout(() => setPhase(0), 100),
+      setTimeout(() => setPhase(1), 800),
+      setTimeout(() => setPhase(2), 2000),
+      setTimeout(() => setPhase(3), 3200),
+    ]
 
-    return () => {
-      clearTimeout(t1)
-      clearTimeout(t2)
-      clearTimeout(t3)
-      clearTimeout(t4)
-      clearTimeout(t5)
-    }
-  }, [])
-
-  const dismiss = () => {
-    setExiting(true)
-    setTimeout(() => setVisible(false), 500)
-  }
+    return () => timers.forEach(clearTimeout)
+  }, [visible])
 
   if (!visible) return null
 
@@ -72,7 +66,7 @@ export function WelcomeOverlay() {
 
   return (
     <div className={`welcome-overlay ${exiting ? 'exiting' : ''}`} onClick={dismiss}>
-      <div className="welcome-card">
+      <div className="welcome-card" onClick={(e) => e.stopPropagation()}>
         <img
           src={avatar}
           alt="Miri"
@@ -89,6 +83,11 @@ export function WelcomeOverlay() {
             {msgs[2]}
           </div>
         </div>
+        {phase >= 3 && (
+          <button className="welcome-dismiss" onClick={dismiss}>
+            ¡Vamos allá!
+          </button>
+        )}
       </div>
     </div>
   )
