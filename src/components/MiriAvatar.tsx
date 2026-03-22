@@ -1,9 +1,9 @@
 const AVATARS = [
-  '/img-mari/miri-1.png',  // Monday - crying
-  '/img-mari/miri-2.png',  // Tuesday - sad
-  '/img-mari/miri.3.png',  // Wednesday - serious
-  '/img-mari/miri-4.png',  // Thursday - happy
-  '/img-mari/miri.5.png',  // Friday - euphoric
+  '/img-mari/miri-1.webp',  // Monday - crying
+  '/img-mari/miri-2.webp',  // Tuesday - sad
+  '/img-mari/miri.3.webp',  // Wednesday - serious
+  '/img-mari/miri-4.webp',  // Thursday - happy
+  '/img-mari/miri.5.webp',  // Friday - euphoric
 ]
 
 interface Props {

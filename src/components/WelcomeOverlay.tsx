@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 
 const AVATARS = [
-  '/img-mari/miri-1.png',
-  '/img-mari/miri-2.png',
-  '/img-mari/miri.3.png',
-  '/img-mari/miri-4.png',
-  '/img-mari/miri.5.png',
+  '/img-mari/miri-1.webp',
+  '/img-mari/miri-2.webp',
+  '/img-mari/miri.3.webp',
+  '/img-mari/miri-4.webp',
+  '/img-mari/miri.5.webp',
 ]
 
 const MESSAGES: Record<number, [string, string, string]> = {
