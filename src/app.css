@@ -1,0 +1,657 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #faf5f6;
+  --card: #ffffff;
+  --surface: #f3eced;
+  --primary: #4a3438;
+  --accent: #C2002F;
+  --accent-soft: #fceef1;
+  --text: #3a2a2e;
+  --text-secondary: #6b555a;
+  --text-muted: #b09a9e;
+  --border: #eddfe1;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --shadow: 0 1px 2px rgba(45, 42, 38, 0.04);
+  --shadow-md: 0 4px 16px rgba(45, 42, 38, 0.07);
+  --shadow-lg: 0 8px 30px rgba(45, 42, 38, 0.1);
+  --font-mono: 'Google Sans Mono', ui-monospace, monospace;
+}
+
+body {
+  font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+}
+
+/* ── App Shell ── */
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
+
+/* ── Summary Header ── */
+.summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.summary-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+  line-height: 1.15;
+}
+
+.summary-week-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 3px;
+}
+
+.miri-avatar {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.miri-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Welcome Overlay ── */
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(58, 42, 46, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.4s ease;
+  cursor: pointer;
+}
+
+.welcome-overlay.exiting {
+  animation: fadeOut 0.5s ease forwards;
+}
+
+.welcome-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px;
+}
+
+.welcome-avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.welcome-avatar.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.welcome-texts {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.welcome-day {
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -1px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.welcome-day.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.welcome-msg {
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.welcome-msg.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.welcome-cheer {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.welcome-cheer.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* ── Sidebar (desktop) ── */
+.sidebar {
+  display: contents;
+}
+
+/* ── Week Config ── */
+.week-config {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+}
+
+.config-row {
+  display: flex;
+  gap: 12px;
+}
+
+.config-row label {
+  flex: 1;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.config-row input {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  text-align: center;
+  width: 100%;
+  color: var(--text);
+  background: var(--bg);
+  transition: border-color 0.2s;
+}
+
+.config-row input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.reset-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px;
+  background: none;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.reset-btn:hover {
+  color: var(--text-secondary);
+  border-color: var(--text-muted);
+}
+
+/* ── Week Summary ── */
+.week-summary {
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-bar.overtime .progress-fill {
+  background: var(--accent);
+}
+
+.summary-stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat {
+  text-align: center;
+  flex: 1;
+}
+
+.stat + .stat {
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-value {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-top: 3px;
+}
+
+.stat-overtime .stat-value {
+  color: var(--accent);
+}
+
+.stat-overtime .stat-label {
+  color: var(--accent);
+}
+
+/* ── Days List ── */
+.days-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Day Card ── */
+.day-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s, box-shadow 0.25s;
+  position: relative;
+}
+
+.day-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: transparent;
+  transition: background 0.2s;
+}
+
+.day-card.today {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.day-card.today::before {
+  background: var(--accent);
+}
+
+.day-card.filled::before {
+  background: var(--accent);
+}
+
+.day-card.holiday {
+  background: var(--accent-soft);
+  border-color: transparent;
+}
+
+.day-card.holiday::before {
+  background: var(--accent);
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.day-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: -0.2px;
+  transition: color 0.2s;
+}
+
+.day-card.filled .day-name {
+  color: var(--accent);
+}
+
+.day-card.holiday .day-name {
+  color: var(--accent);
+}
+
+.day-card.today .day-name {
+  color: var(--accent);
+}
+
+.day-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.day-actions button {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  transition: all 0.15s;
+}
+
+.day-actions button:hover {
+  border-color: var(--text-muted);
+}
+
+.day-actions button:active {
+  transform: scale(0.93);
+}
+
+.day-actions button .material-symbols-rounded {
+  font-size: 16px;
+}
+
+.holiday-toggle .material-symbols-rounded {
+  font-size: 13px !important;
+}
+
+.holiday-toggle.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ── Day Body ── */
+.day-body {
+  margin-bottom: 8px;
+}
+
+.holiday-label {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+  padding: 8px 0;
+  text-align: center;
+  letter-spacing: -0.1px;
+}
+
+/* ── Time Input (direct mode) ── */
+.time-input input {
+  width: 100%;
+  font-size: 26px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  text-align: center;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.2s;
+  letter-spacing: -0.5px;
+}
+
+.time-input input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.time-input input::placeholder {
+  color: var(--border);
+  font-weight: 500;
+}
+
+/* ── Time Range Input ── */
+.time-range-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-range-field {
+  flex: 1;
+  position: relative;
+}
+
+.time-range-field-label {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.time-range-input input {
+  width: 100%;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  text-align: center;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 4px;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+
+.time-range-input input.has-suggestion {
+  color: transparent;
+}
+
+.time-range-input input.has-suggestion:focus {
+  color: var(--text);
+}
+
+.time-suggestion {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.time-range-input input:focus + .time-suggestion {
+  display: none;
+}
+
+.time-range-input input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.range-separator {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 300;
+  padding-top: 2px;
+}
+
+/* ── Day Footer ── */
+.day-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 2px;
+}
+
+.hours-done {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.hours-done .material-symbols-rounded {
+  font-size: 14px;
+}
+
+.hours-suggested {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* ═══════════════════════════════
+   Desktop layout: >= 768px
+   ═══════════════════════════════ */
+@media (min-width: 768px) {
+  .app {
+    max-width: 960px;
+    padding: 48px 32px 60px;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 1fr;
+    gap: 0 32px;
+    grid-template-areas:
+      "sidebar days";
+    align-items: start;
+  }
+
+  .sidebar {
+    grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: sticky;
+    top: 32px;
+  }
+
+  .days-list {
+    grid-area: days;
+    gap: 10px;
+  }
+
+  .day-card {
+    padding: 16px 20px;
+  }
+
+  .day-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--text-muted);
+  }
+
+  .day-card.today:hover {
+    border-color: var(--accent);
+  }
+
+  .week-summary {
+    margin-bottom: 0;
+  }
+
+  .week-config {
+    margin-bottom: 0;
+  }
+}
+
+/* ═══════════════════════════════
+   Wide desktop: >= 1100px
+   ═══════════════════════════════ */
+@media (min-width: 1100px) {
+  .app {
+    max-width: 1080px;
+    grid-template-columns: 320px 1fr;
+    gap: 0 40px;
+  }
+
+  .days-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+    align-content: start;
+  }
+}
