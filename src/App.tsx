@@ -1,4 +1,5 @@
 import { useWeekData } from './hooks/useWeekData'
+import { useUsername } from './hooks/useUsername'
 import { WeekConfig } from './components/WeekConfig'
 import { DayCard } from './components/DayCard'
 import { WeekSummary } from './components/WeekSummary'
@@ -23,12 +24,13 @@ export default function App() {
     resetWeek,
     summary,
   } = useWeekData()
+  const { username, saveUsername, isMiri } = useUsername()
 
   const dayIndex = Math.min(4, Math.max(0, new Date().getDay() - 1))
 
   return (
     <>
-    <WelcomeOverlay />
+    <WelcomeOverlay username={username} onSaveName={saveUsername} isMiri={isMiri} />
     <div className="app">
       <div className="sidebar">
         <WeekSummary
@@ -41,6 +43,8 @@ export default function App() {
           progress={summary.progress}
           weekLabel={getWeekLabel(weekData.weekStart)}
           dayIndex={dayIndex}
+          username={username}
+          isMiri={isMiri}
         />
 
         <WeekConfig

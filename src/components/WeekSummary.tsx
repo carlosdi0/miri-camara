@@ -11,6 +11,8 @@ interface Props {
   progress: number
   weekLabel: string
   dayIndex: number
+  username: string
+  isMiri: boolean
 }
 
 export function WeekSummary({
@@ -23,6 +25,8 @@ export function WeekSummary({
   progress,
   weekLabel,
   dayIndex,
+  username,
+  isMiri,
 }: Props) {
   const hasOvertime = overtime > 0
 
@@ -30,10 +34,10 @@ export function WeekSummary({
     <div className="week-summary">
       <div className="summary-header">
         <div>
-          <h1 className="summary-title">La Jornada de Miri</h1>
+          <h1 className="summary-title">La Jornada de {username || 'Miri'}</h1>
           <div className="summary-week-label">{weekLabel}</div>
         </div>
-        <MiriAvatar dayIndex={dayIndex} />
+        {isMiri && <MiriAvatar dayIndex={dayIndex} />}
       </div>
 
       <div className={`progress-bar ${hasOvertime ? 'overtime' : ''}`}>
