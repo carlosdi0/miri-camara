@@ -34,7 +34,7 @@ export function WeekSummary({
     <div className="week-summary">
       <div className="summary-header">
         <div>
-          <h1 className="summary-title">La Jornada de {username || 'Miri'}</h1>
+          <h1 className="summary-title">La Jornada{username ? ` de ${username}` : ''}</h1>
           <div className="summary-week-label">{weekLabel}</div>
         </div>
         {isMiri && <MiriAvatar dayIndex={dayIndex} />}
